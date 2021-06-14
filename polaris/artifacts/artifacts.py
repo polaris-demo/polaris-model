@@ -1,0 +1,3 @@
+def path_for(artifact_name):
+  # This shouldn't be hard coded like this...
+  return "/mnt/vol/repo/artifacts/model"

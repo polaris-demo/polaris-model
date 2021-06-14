@@ -1,0 +1,36 @@
+kind: "ModelPipeline"
+version: "1"
+
+type: ConcreteModelPipeline
+
+stages:
+  train:
+    steps:
+      - name: fetch-data
+        type: ShellStep
+        command: |
+          cd /mnt/vol/repo && \
+          pip install presto-python-client && \
+          python fetch_data.py
+        image: host.k3d.internal:13000/polaris-example/workflow_image:1.0
+        shell: [sh, -c]
+        artifacts:
+          - name: data-frame
+            path: /mnt/vol/repo/artifacts/data.pkl
+
+      - type: ShellStep
+        name: run-train-code
+        command: cd /mnt/vol/repo && python train_basic.py
+        image: host.k3d.internal:13000/polaris-example/workflow_image:1.0
+        shell: [sh, -c]
+        artifacts:
+          - name: model-binary
+            path: /mnt/vol/repo/artifacts/model
+
+  package:
+    formats:
+      - type: HttpImage
+        name: "http-image"
+        base_image: host.k3d.internal:13000/polaris-example/workflow_image:1.0
+        external_registry_url: "host.k3d.internal:13000/foo/bar"
+        insecure: host.k3d.internal:13000
