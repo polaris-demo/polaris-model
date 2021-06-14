@@ -10,9 +10,8 @@ stages:
         type: ShellStep
         command: |
           cd /mnt/vol/repo && \
-          pip install presto-python-client && \
           python fetch_data.py
-        image: host.k3d.internal:13000/polaris-example/workflow_image:1.0
+        image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
         shell: [sh, -c]
         artifacts:
           - name: data-frame
@@ -21,7 +20,7 @@ stages:
       - type: ShellStep
         name: run-train-code
         command: cd /mnt/vol/repo && python train_basic.py
-        image: host.k3d.internal:13000/polaris-example/workflow_image:1.0
+        image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
         shell: [sh, -c]
         artifacts:
           - name: model-binary
@@ -31,6 +30,6 @@ stages:
     formats:
       - type: HttpImage
         name: "http-image"
-        base_image: host.k3d.internal:13000/polaris-example/workflow_image:1.0
+        base_image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
         external_registry_url: "host.k3d.internal:13000/foo/bar"
         insecure: host.k3d.internal:13000
