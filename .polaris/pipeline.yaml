@@ -31,5 +31,4 @@ stages:
       - type: HttpImage
         name: "http-image"
         base_image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
-        external_registry_url: "host.k3d.internal:13000/foo/bar"
-        insecure: host.k3d.internal:13000
+        external_registry_url: "667552661262.dkr.ecr.us-west-2.amazonaws.com/simulated-data-plane-app/model"
