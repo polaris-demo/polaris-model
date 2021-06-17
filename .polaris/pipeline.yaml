@@ -20,7 +20,7 @@ stages:
       - type: ShellStep
         name: run-train-code
         command: cd /mnt/vol/repo && python train_basic.py
-        image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
+        image: jupyter/datascience-notebook
         shell: [sh, -c]
         artifacts:
           - name: model-binary
