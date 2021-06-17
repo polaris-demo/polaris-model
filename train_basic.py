@@ -6,7 +6,7 @@ import pandas as pd
 
 def train():
   # NOTE (Josh): this should actually access the persistent artifact from fetch_data NOT us the PV...
-  df = pd.read_pickle("/mnt/vol/repo/artifacts/data.pkl")
+  df = pd.read_pickle("/mnt/vol/repo/artifacts/data2.pkl")
   train_X = df[["fixed_acidity", "residual_sugar"]]
   train_Y = df["quality"]
 

@@ -15,7 +15,7 @@ stages:
         shell: [sh, -c]
         artifacts:
           - name: data-frame
-            path: /mnt/vol/repo/artifacts/data.pkl
+            path: /mnt/vol/repo/artifacts/data2.pkl
 
       - type: ShellStep
         name: run-train-code
