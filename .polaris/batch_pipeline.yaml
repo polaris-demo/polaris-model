@@ -1,0 +1,34 @@
+kind: "ModelPipeline"
+version: "1"
+
+type: ConcreteModelPipeline
+
+stages:
+  train:
+    steps:
+      - name: fetch-data
+        type: ShellStep
+        command: |
+          cd /mnt/vol/repo && \
+          python fetch_data.py
+        image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
+        shell: [sh, -c]
+        artifacts:
+          - name: data-frame
+            path: /mnt/vol/repo/artifacts/data.pkl
+
+      - type: ShellStep
+        name: run-train-code
+        command: cd /mnt/vol/repo && python train_basic.py
+        image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
+        shell: [sh, -c]
+        artifacts:
+          - name: model-binary
+            path: /mnt/vol/repo/artifacts/model
+
+  package:
+    formats:
+      - type: BatchScriptImage
+        name: "batch-image"
+        base_image: public.ecr.aws/o9r7v9o0/polaris/demo/workflow_image:master.45a40283091094be28660101479e0779d7b5b5e6
+        external_registry_url: "667552661262.dkr.ecr.us-west-2.amazonaws.com/simulated-data-plane-app/model"
