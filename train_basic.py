@@ -1,7 +1,7 @@
-# code in the polaris-examples repo
 import polaris
-from joblib import dump
+import pickle
 from sklearn.linear_model import Ridge
+from sklearn.pipeline import Pipeline
 import pandas as pd
 
 def train():
@@ -11,15 +11,20 @@ def train():
   train_Y = df["quality"]
 
   l2 = polaris.train.parameters.get("l2")
+  
   model = Ridge(alpha=l2)
-  model.fit(train_X, train_Y)
+  pipeline = Pipeline([("ridge", model)])
 
-  r2 = model.score(train_X, train_Y)
+  pipeline.fit(train_X, train_Y)
+
+  r2 = pipeline.score(train_X, train_Y)
   polaris.train.metrics.record("r2", r2)
 
   # save off the artifact to the artifact storage dir
   model_path = polaris.artifacts.path_for("reg_model")
-  dump(model, model_path)
+  with open(model_path, "wb") as f:
+    pickle.dump(pipeline, f)
 
 if __name__ == "__main__":
   train() # run the train function
+
